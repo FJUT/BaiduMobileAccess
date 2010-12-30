@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>kainy/BaiduMobileAccess @ GitHub</title>
+	
+	<style type="text/css">
+		body {
+  		margin-top: 1.0em;
+  		background-color: #17c9e7;
+		  font-family: "Helvetica,Arial,FreeSans";
+  		color: #000000;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+		h1 { font-size: 3.8em; color: #e83618; margin-bottom: 3px; }
+		h1 .small { font-size: 0.4em; }
+		h1 a { text-decoration: none }
+		h2 { font-size: 1.5em; color: #e83618; }
+    h3 { text-align: center; color: #e83618; }
+    a { color: #e83618; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+		pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+	</style>
+	
+</head>
+
+<body>
+  <a href="http://github.com/kainy/BaiduMobileAccess"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/kainy/BaiduMobileAccess/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/kainy/BaiduMobileAccess/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+
+    <h1><a href="http://github.com/kainy/BaiduMobileAccess">自动完成wifi准入</a>
+      <span class="small">by <a href="http://github.com/kainy">kainy</a></span></h1>
+
+    <div class="description">
+      百度牛人skiyo(skiyo.cn)的第一个iOS App，用于加入WIFI后.自动完成准入页面认证. 支持账号密码记录，通过curl绑定ip支持https准入页面。开发历程中的思路值得借鉴。
+    </div>
+
+    <p>以下内容来自：http://www.skiyo.cn/2010/11/19/my-first-ios-app .</p><h2>Dependencies</h2>
+<p>我们公司WIFI有个特点.就是你加入WIFI后.再需要去一个地址去做一下准入.这时候才可以登录到互联网.
+所以我一直想做一个自动准入的小app.
+回想起来.从有这个想法到现在 快有将近一个月的时间了.
+
+真是一路坎坷.我想我得把这点经历写下来.能给大家带来一些帮助.
+
+起初来说.这个app原理是相当简单的.只不过是发一个http请求 然后解析返回 显示登录是否成功.
+
+好吧 我们开工.首先我没有一台mac. 尽管这是我的一个小的愿望.
+
+所以我们需要安装一个linux 我是安装的Ubuntu 10.10 64bit. 然后网上教程一大堆 去教你怎么搭建toolchain环境.
+
+搭建好了之后可以测试下toolchain自带的hello toolchain的app.
+
+这一路我都非常通畅.尽管在编译toolchain遇到几个小问题.但都可以google解决.
+
+好吧.现在我们可以开始写程序了.
+
+但是怎么写呢? 我靠. 我可以前没接触过Objective-c 更别提iphone app了.
+
+怎么办? 只能网上去看些简单的app例子. 摸索着来了..
+
+我想想中的app布局相当的简单.弄个标题栏.左边的按钮是”帮助” 右边的是”准入”
+
+下面两个输入框.一个账号 一个密码.OK 就这么简单.
+
+但是由于我们没有mac 所以就没有Interface Builder. 穷人的我们无法借用最高的生成工具.
+
+注定我们要杯具.
+
+现在的我 没有看过任何关于iphone的书籍. 各种View是干什么的.一片茫然.
+
+我觉得这么一个简单的APP不值得去花费时间看书了.所以我只好去网上搜索各种开源的app 以寻找界面类似的.
+
+可是不幸的是. 可以说大部分开源的都是用IB做的. 那些讨厌的xib文件我不得不放弃..
+
+虽然在一些极少数的开源的app中我找到了一些有用的代码.但是我不得不还得自己摸索.
+
+在得知我想要的界面需要使用TableView时候.我就去google关于TableView的开源代码.
+
+庆幸的是.这些界面上的东西.大部分开源代码都可以拿来直接使用.只不过修改一些属性而已.借助着apple的文档.
+
+在耗费我整整一个周末的前提下.终于解决掉.
+
+这里再啰嗦一句: 真机调试界面真的很麻烦 几乎每次修改一个简单的属性 我就得编译 部署一次..
+
+至此.第一道坎算是迈过去了.
+
+好吧 开始我们的业务逻辑之旅了.
+
+首先解决的一个问题就是怎么我们需要把用户输入的账号和密码先记录下来 以后避免用户多次输入.
+
+
+这个比较好解决 写一个plist文件就行了 所以我就去搜索关于读写plist的代码.
+
+之后 测试已经正常.但是问题出在了 我部署程序是部署到/Application下的 如果通过ipa包来安装是在/private/var/mobile/Applications下.
+
+每个app都有一个属于自己的目录 我将要写的plist和程序都放在这里 后来发现无法存储 搜索后得知这个目录是不可写的. 每个app只有一个目录是可写的 就是其对应的Documents.
+
+但是安装ipa的时候 无法将文件安装的Documents下 (有可能是我不会?)
+
+所以我的解决方法就是 程序启动的时候 判断Documents下有没有存储用户账号密码的文件 如果没有就去创建一个 如果有就去读取.
+
+这个问题算是解决掉.
+
+下面核心的任务就是发送HTTP请求. 开始我准备使用ASIHTTPRequest. 经过介绍非常强大.
+
+但是不知道是不是由于我的toolchain或者版本的问题 编译一直有语法错误. 我也没仔细去修改. 所以决定放弃使用.
+
+所以就改为apple给提供的API NSURL系列函数来解决.
+
+网上google了一些发送HTTP请求的 然后搬到我的代码中. 测试baidu.com可以正常GET到网页. 还算比较顺利.
+
+当我回到公司把请求的地址改成公司的准入地址后.杯具的事情发生了.准入的地址是HTTPS的.
+
+NSURL是支持https的 但是万恶的准入地址的证书是有问题的 所以会报错.
+
+搜索后 得知NSURL是可以忽略证书错误的.但是这个方法是私有方法. apple并没有开放.
+
+明显的 我这个app是不准备提交给apple的 所以网上搜调用私有方法的方式 并解决之.
+
+来到公司测试后.发现了一个非常严重的问题. 这个问题是这样的 我详细描述一下.
+
+在我加入到公司的WIFI后. 这时候并不能登录互联网.因为没有进行准入.
+
+如果这时候去运行我的APP 发出HTTP准入连接请求.注意 这里的这个请求是发往内网验证的.
+
+由于WIFI访问不到互联网.所以iOS会认为WIFI不可用. 直接去使用其他方式 比如蜂窝网络去访问这个内网地址.
+
+理所当然的 访问不了了.
+
+在这里我陷入了一个困境. 这里的问题就像一个漩涡一样.
+
+我在想 是不是因为NSURL都是经过apple的包装后 进行了链接时候的判断. 如果用一个非官方的库 比如curl.
+
+OK 开始行动. 比较庆幸的是 有人已经编译好了 libcurl for iOS. 直接拿来静态编译.但是遇到一个编译错误.
+
+后来才知道 缺少一个 -lz 的参数. 在这里又耗费了很长时间.
+
+编译成功后 果断运行. 非常杯具的错误提示又发生了. 这个libcurl库是不支持SSL的.
+
+所以我就去寻找libcurl for ios with SSL. 但是很显然 网上没有一个现成的库.
+
+可是我搜索到一个编译方法 还是一个中国人写的一篇博客. 但是我按照他的方法 怎么也编译不成功.
+
+然后通过他博客的方法联系他 至今没有任何答复.
+
+只要硬着头皮尝试着编译. 功夫不负有心人 最终编译成功.
+
+赶紧静态编译进来程序 然后测试准入 同样杯具. 还是上面的问题 请求还是没有走WIFI.
+
+到这里我突然没了信心. 一个这么简单的程序 耗费了我太多精力 周末基本上都在搞这个了.
+
+我能想到的解决方法只有去搜索: iphone 强制 wifi 之类的关键词去搜索. 但是都一无所获.
+
+到这里 我已经停滞不前 想不到解决方法.
+
+直到某一天 我发现有个人做了一个PPPOE拨号的程序 有点类似于我这个程序 他的也是WIFI登录后 进行验证.
+
+所以联系到他 跟他索要源码学习 结果这个人没有一点开源精神. 在我再三的请求下 直接不回我的QQ消息了.
+
+无果 只能再等待灵感了.
+
+在twitter上去问@tinyfool这个问题 他不太明白我的处境 只是建议我用socket去尝试一下.
+
+我突然觉得这又是一条路子. 说到socket 我突然想到 socket可以绑定IP 也就是说在你多个网卡并存的条件下.你可以指定其中的一块发送数据.
+
+我欣喜若狂. 可是如果用socket 我前面的curl就白费了 .
+
+由于curl是基于socket的 所以我就去查询 curl绑定ip 果不其然 curl也提供了这个参数.
+
+马上开始写程序 这次终于准入成功 我内牛满面..
+
+至此 一些大的问题算是解决完毕. 这个小的app终于算出炉了.
+
+再啰嗦一下 由于没有mac 所以调试起来非常麻烦 我最愚蠢的调试方法就是在需要的地方 添加一个AlertView…= =||.
+
+源码就不发上来丢人了 纯粹是搭积木式的源码. 你一定无法忍受这么丑陋的代码.
+
+如果你特别需要可以跟我联系.
+
+好了 啰嗦了这么一大堆 纯粹是发泄一下.
+
+我下面总结一下:
+
+1. 没有mac千万不要写iOS程序. 那将是你的不归路.
+
+2. 我要买一台mac.</p>
+<h2>Authors</h2>
+<p>Skiyo（dongliqiang@baidu.com）</p>
+<h2>Contact</h2>
+<p>Kainy Guo (gt@kainy.cn)<br/>      </p>
+
+
+    <h2>Download</h2>
+    <p>
+      You can download this project in either
+      <a href="http://github.com/kainy/BaiduMobileAccess/zipball/master">zip</a> or
+      <a href="http://github.com/kainy/BaiduMobileAccess/tarball/master">tar</a> formats.
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+      by running:
+      <pre>$ git clone git://github.com/kainy/BaiduMobileAccess</pre>
+    </p>
+
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/kainy/BaiduMobileAccess">kainy/BaiduMobileAccess</a>
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-17163811-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>
