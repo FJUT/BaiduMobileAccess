@@ -1,0 +1,9 @@
+put this in your Makefile:
+
+LDFLAGS += -I./include
+LDFLAGS += -L./lib 
+LDFLAGS += -lssl -lcrypto -lcurl -lz
+
+Good luck!
+
+Email: dongliqiang@baidu.com
